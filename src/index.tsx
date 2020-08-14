@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import "./sortingAlgos";
+import sortingAlgorithms from "./sortingAlgorithms";
 
 interface IArrayElementComponent {
     value : number
@@ -47,22 +47,16 @@ const App = () => {
         setArray(initialArray);
     }, []);
 
-    // helper: sort algorithm that call state-change handler
-    // TODO: this is wrong lmao
-    const sort = (array : number[]) => {
-        let sortedArray = [...array];
-        for (let i = 0; i < 20; i++) {
-            sortedArray.forEach((e, i) => {
-                if (i < sortedArray.length - 1) {
-                    if (e > sortedArray[i+1]) {
-                        const temp = e;
-                        sortedArray[i] = sortedArray[i+1];
-                        sortedArray[i+1] = temp;
-                        setArray(sortedArray);
-                    }
-                }
-            });
+    // TODO: set up function returns function handler + enum type
+    const sort = (array : number[], sortingAlgorithm : string) => {
+        switch (sortingAlgorithm) {
+            case "selection":   setArray(sortingAlgorithms.selectionSort([...array]));  break;
+            case "insertion":   setArray(sortingAlgorithms.insertionSort([...array]));  break;
+            case "bubble":      setArray(sortingAlgorithms.bubbleSort([...array]));     break;
+            case "merge":       setArray(sortingAlgorithms.mergeSort([...array]));      break;
+            case "heap":        setArray(sortingAlgorithms.heapSort([...array]));       break;
         }
+
     };
 
     const generateRandomNumber = (max : number) => {
@@ -73,7 +67,11 @@ const App = () => {
     return (
         <div>
             <ArrayComponent data={array} />
-            <button onClick={() => sort(array)}>Sort!</button>
+            <button onClick={() => sort(array, "selection")}>Selection Sort!</button>
+            <button onClick={() => sort(array, "insertion")}>Insertion Sort!</button>
+            <button onClick={() => sort(array, "ibubble")}>Bubble Sort!</button>
+            <button onClick={() => sort(array, "merge")}>Merge Sort!</button>
+            <button onClick={() => sort(array, "heap")}>Heap Sort!</button>
         </div>
     );
 
