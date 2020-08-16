@@ -8,14 +8,14 @@ interface IArrayElementComponent {
 }
 const ArrayElementComponent = ({ value } : IArrayElementComponent) => {
     const style = {
-        display: "inline-block",
-        width: 30,
+        // display: "inline-block",
+        // width: 30,
         height: value,
-        color: "white",
-        backgroundColor: "black"
+        // color: "white",
+        // backgroundColor: "black"
     };
     return (
-        <div style={style}>{value}</div>
+        <div className="array-element-component" style={style}>{value}</div>
     );
 };
 
@@ -25,7 +25,7 @@ interface IArrayComponent {
 
 const ArrayComponent = ({ data } : IArrayComponent) => {
     return (
-        <div>
+        <div className="array-component">
             {data.map((e, i) =>  <ArrayElementComponent key={i} value={e} />)}
         </div>
     );
@@ -34,7 +34,7 @@ const ArrayComponent = ({ data } : IArrayComponent) => {
 // set up app component
 const App = () => {
     // set up constants
-    const MAX_ARRAY_SIZE = 30;
+    const MAX_ARRAY_SIZE = 10;
     const MAX_ARRAY_VAL = 30;
 
     // set up array state hook
