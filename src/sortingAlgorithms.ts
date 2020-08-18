@@ -1,14 +1,17 @@
 // TODO: set up tests that results are sorted
 const selectionSort = (array : number[]) => {
-    console.log("initial: ", array);
+    console.log(array);
+    let animations : number[][] = [];
     for (let i : number = 0; i < array.length; i++) {
         let curr = array[i];
         let minIdx = findMinIdx(array, i, array.length);
+        animations.push([i, minIdx, array[i], array[minIdx]]);
+        animations.push([i, minIdx, array[minIdx], array[i]]);
+
         array[i] = array[minIdx];
         array[minIdx] = curr;
     }
-    console.log("sorted: ", array);
-    return array;
+    return {animations: animations, sortedArray: array};
 };
 
 const findMinIdx = (array : number[], start : number, end : number) => {
@@ -25,40 +28,41 @@ const findMinIdx = (array : number[], start : number, end : number) => {
 };
 
 const insertionSort = (array : number[]) => {
-    console.log("initial: ", array);
+    let animations : number[][] = [];
     for (let i : number = 1; i < array.length; i++) {
         let curr : number = array[i];
-        // for (let j : number = 0; j < i; j++) {
-        //     if (curr < array[j]) {
-        //         for (let k : number = i; k > j; k--) array[k] = array[k-1];
-        //         array[j] = curr;
-        //         break;
-        //     }
-        // }
         let j : number = i - 1;
         while (j >= 0 && array[j] > curr) {
+            animations.push([j, j+1, array[j], array[j+1]]);
+            animations.push([j, j+1, array[j], array[j]]);
+
             array[j+1] = array[j];
             j--;
         }
+
+        animations.push([i, j+1, array[i], array[j+1]]);
+        animations.push([i, j+1, array[i], array[i]]);
         array[j+1] = curr;
     }
-    console.log("sorted: ", array);
-    return array;
+    return {animations: animations, sortedArray: array};
 };
 
 const bubbleSort = (array : number[]) => {
+    let animations : number[][] = [];
     // TODO: implement
-    return array;
+    return {animations: animations, sortedArray: array};
 };
 
 const mergeSort = (array : number[]) => {
+    let animations : number[][] = [];
     // TODO: implement
-    return array;
+    return {animations: animations, sortedArray: array};
 };
 
 const heapSort = (array : number[]) => {
+    let animations : number[][] = [];
     // TODO: implement
-    return array;
+    return {animations: animations, sortedArray: array};
 };
 
 export default { insertionSort, selectionSort, bubbleSort, mergeSort, heapSort };

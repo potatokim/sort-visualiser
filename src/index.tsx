@@ -1,80 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import ReactDOM from "react-dom";
+import "./index.css";
+import Title from "./components/Title";
+import MenuBar from "./components/MenuBar";
+import ArrayComponent from "./components/ArrayComponent";
 import sortingAlgorithms from "./sortingAlgorithms";
 
-interface IArrayElementComponent {
-    value : number
-}
-const ArrayElementComponent = ({ value } : IArrayElementComponent) => {
-    const style = {
-        // display: "inline-block",
-        // width: 30,
-        height: value,
-        // color: "white",
-        // backgroundColor: "black"
-    };
-    return (
-        <div className="array-element-component" style={style}>{value}</div>
-    );
-};
-
-interface IArrayComponent {
-    data : number[]
-}
-
-const ArrayComponent = ({ data } : IArrayComponent) => {
-    return (
-        <div className="array-component">
-            {data.map((e, i) =>  <ArrayElementComponent key={i} value={e} />)}
-        </div>
-    );
-};
-
-// set up app component
 const App = () => {
     // set up constants
-    const MAX_ARRAY_SIZE = 10;
-    const MAX_ARRAY_VAL = 30;
+    const MIN_ARRAY_SIZE = 5;
+    const MAX_ARRAY_SIZE = 30;
+    const MIN_ARRAY_VAL = 0;
+    const MAX_ARRAY_VAL = 500;
+    const ANINMATION_SPEED = 100;
 
     // set up array state hook
     const [ array, setArray ] = useState<number[]>([]);
 
-    // set initial array state
-    useEffect(() => {
-        const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE)).fill(0)
-            .map(() => generateRandomNumber(MAX_ARRAY_VAL));
+    const resetArray = () : void => {
+        const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE, MIN_ARRAY_SIZE)).fill(0)
+            .map(() => generateRandomNumber(MAX_ARRAY_VAL, MIN_ARRAY_VAL));
         setArray(initialArray);
-    }, []);
+    };
 
-    // TODO: set up function returns function handler + enum type
-    const sort = (array : number[], sortingAlgorithm : string) => {
-        switch (sortingAlgorithm) {
-            case "selection":   setArray(sortingAlgorithms.selectionSort([...array]));  break;
-            case "insertion":   setArray(sortingAlgorithms.insertionSort([...array]));  break;
-            case "bubble":      setArray(sortingAlgorithms.bubbleSort([...array]));     break;
-            case "merge":       setArray(sortingAlgorithms.mergeSort([...array]));      break;
-            case "heap":        setArray(sortingAlgorithms.heapSort([...array]));       break;
+    // set initial array state
+    useEffect(resetArray, []);
+
+    const sort = async (sortingAlgorithm : string) : Promise<void> =>  {
+        // TODO: error message
+        const sortingFunc = getSortingFunc(sortingAlgorithm);
+        if (sortingFunc) {
+            const {animations, sortedArray} = sortingFunc([...array]);
+            await animate(animations);
+            setArray(sortedArray);
         }
-
     };
 
-    const generateRandomNumber = (max : number) => {
-        return Math.floor(Math.random() * max);
+    const getSortingFunc =
+        (sortingAlgorithm : string) : (array : number[]) => { animations : number[][], sortedArray : number[] } => {
+            switch (sortingAlgorithm) {
+                case "selection":   return sortingAlgorithms.selectionSort;
+                case "insertion":   return sortingAlgorithms.insertionSort;
+                case "bubble":      return sortingAlgorithms.bubbleSort;
+                case "merge":       return sortingAlgorithms.mergeSort;
+                case "heap":        return sortingAlgorithms.heapSort;
+                default:            return sortingAlgorithms.selectionSort;
+            }
+        };
+
+    const animate = (animations : number[][]) => {
+        const arrayElements =
+            Array.from(document.getElementsByClassName("array-element-component")) as unknown as HTMLCollectionOf<HTMLElement>;
+        return new Promise((resolve) => {
+            for (let i = 0; i < animations.length; i++) {
+                setTimeout(() => {
+                    const color = i % 2 ?  "cadetblue" : "lightcoral";
+                    arrayElements[animations[i][0]].style.backgroundColor = color;
+                    arrayElements[animations[i][1]].style.backgroundColor = color;
+                    arrayElements[animations[i][0]].style.height = `${animations[i][2]}px`;
+                    arrayElements[animations[i][1]].style.height = `${animations[i][3]}px`;
+                    if (i === animations.length - 1) resolve("animate");
+                }, i * ANINMATION_SPEED);
+            }
+        });
     };
 
-    // render button and array visually
+    const generateRandomNumber = (max : number, min : number) : number => {
+        return Math.floor(Math.random() * (max - min) + min);
+    };
+
     return (
         <div>
+            <Title />
+            <MenuBar resetArray={resetArray} sort={sort} />
             <ArrayComponent data={array} />
-            <button onClick={() => sort(array, "selection")}>Selection Sort!</button>
-            <button onClick={() => sort(array, "insertion")}>Insertion Sort!</button>
-            <button onClick={() => sort(array, "ibubble")}>Bubble Sort!</button>
-            <button onClick={() => sort(array, "merge")}>Merge Sort!</button>
-            <button onClick={() => sort(array, "heap")}>Heap Sort!</button>
         </div>
     );
-
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
