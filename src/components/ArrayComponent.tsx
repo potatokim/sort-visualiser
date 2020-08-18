@@ -1,14 +1,14 @@
-import ArrayElement from "./ArrayElement";
+import ArrayElementComponent from "./ArrayElementComponent";
 import React from "react";
 
-interface IArrayComponent {
+interface IArrayComponentProps {
     data : number[]
 }
 
-const ArrayComponent = ({ data } : IArrayComponent) => {
+const ArrayComponent = ({ data } : IArrayComponentProps) => {
     return (
         <div className="array-component">
-            {data.map((e, i) =>  <ArrayElement key={i} value={e} />)}
+            {data.map((e, i) =>  <ArrayElementComponent key={i} value={e} />)}
         </div>
     );
 };

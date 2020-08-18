@@ -3,7 +3,7 @@ import React from "react";
 interface IArrayElementComponent {
     value : number
 }
-const ArrayElement = ({ value } : IArrayElementComponent) => {
+const ArrayElementComponent = ({ value } : IArrayElementComponent) => {
     const style = {
         height: value,
     };
@@ -12,4 +12,4 @@ const ArrayElement = ({ value } : IArrayElementComponent) => {
     );
 };
 
-export default ArrayElement;
+export default ArrayElementComponent;

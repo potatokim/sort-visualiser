@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import sortingAlgorithms from "./sortingAlgorithms";
+import ReactDOM from "react-dom";
+import "./index.css";
+import Title from "./components/Title";
+import MenuBar from "./components/MenuBar";
 import ArrayComponent from "./components/ArrayComponent";
+import sortingAlgorithms from "./sortingAlgorithms";
 
-// set up app component
 const App = () => {
     // set up constants
+    const MIN_ARRAY_SIZE = 5;
     const MAX_ARRAY_SIZE = 30;
-    const MAX_ARRAY_VAL = 100;
-    const ANINMATION_SPEED = 200;
+    const MIN_ARRAY_VAL = 0;
+    const MAX_ARRAY_VAL = 500;
+    const ANINMATION_SPEED = 100;
 
     // set up array state hook
     const [ array, setArray ] = useState<number[]>([]);
 
-    const resetArray = () => {
-        const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE)).fill(0)
-            .map(() => generateRandomNumber(MAX_ARRAY_VAL));
+    const resetArray = () : void => {
+        const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE, MIN_ARRAY_SIZE)).fill(0)
+            .map(() => generateRandomNumber(MAX_ARRAY_VAL, MIN_ARRAY_VAL));
         setArray(initialArray);
     };
 
     // set initial array state
     useEffect(resetArray, []);
 
-    const sort = async (sortingAlgorithm : string) =>  {
+    const sort = async (sortingAlgorithm : string) : Promise<void> =>  {
         // TODO: error message
         const sortingFunc = getSortingFunc(sortingAlgorithm);
         if (sortingFunc) {
@@ -34,16 +37,17 @@ const App = () => {
     };
 
     const getSortingFunc =
-        (sortingAlgorithm : string) : (array : number[]) => {animations : number[][], sortedArray : number[]} => {
-        switch (sortingAlgorithm) {
-            case "selection":   return sortingAlgorithms.selectionSort;
-            case "insertion":   return sortingAlgorithms.insertionSort;
-            case "bubble":      return sortingAlgorithms.bubbleSort;
-            case "merge":       return sortingAlgorithms.mergeSort;
-            case "heap":        return sortingAlgorithms.heapSort;
-            default:            return sortingAlgorithms.selectionSort;
-        }
-    };
+        (sortingAlgorithm : string) : (array : number[]) => { animations : number[][], sortedArray : number[] } => {
+            switch (sortingAlgorithm) {
+                case "selection":   return sortingAlgorithms.selectionSort;
+                case "insertion":   return sortingAlgorithms.insertionSort;
+                case "bubble":      return sortingAlgorithms.bubbleSort;
+                case "merge":       return sortingAlgorithms.mergeSort;
+                case "heap":        return sortingAlgorithms.heapSort;
+                default:            return sortingAlgorithms.selectionSort;
+            }
+        };
+
     const animate = (animations : number[][]) => {
         const arrayElements =
             Array.from(document.getElementsByClassName("array-element-component")) as unknown as HTMLCollectionOf<HTMLElement>;
@@ -61,20 +65,15 @@ const App = () => {
         });
     };
 
-    const generateRandomNumber = (max : number) => {
-        return Math.floor(Math.random() * max);
+    const generateRandomNumber = (max : number, min : number) : number => {
+        return Math.floor(Math.random() * (max - min) + min);
     };
 
-    // render button and array visually
     return (
         <div>
+            <Title />
+            <MenuBar resetArray={resetArray} sort={sort} />
             <ArrayComponent data={array} />
-            <button onClick={resetArray}>Reset Array</button>
-            <button onClick={() => sort("selection")}>Selection Sort!</button>
-            <button onClick={() => sort("insertion")}>Insertion Sort!</button>
-            <button onClick={() => sort("bubble")}>Bubble Sort!</button>
-            <button onClick={() => sort("merge")}>Merge Sort!</button>
-            <button onClick={() => sort("heap")}>Heap Sort!</button>
         </div>
     );
 };
