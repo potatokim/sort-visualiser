@@ -109,4 +109,4 @@ const testSort = (array : number[]) => {
     return {animations: animations, sortedArray: array};
 };
 
-export default { insertionSort, selectionSort, bubbleSort, mergeSort, heapSort, mergeSortTest: testSort };
+export default { insertionSort, selectionSort, bubbleSort, mergeSort, heapSort, testSort };
