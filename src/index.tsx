@@ -5,6 +5,7 @@ import Title from "./components/Title";
 import MenuBar from "./components/MenuBar";
 import ArrayComponent from "./components/ArrayComponent";
 import sortingAlgorithms from "./sortingAlgorithms";
+import test from "./tests";
 
 const App = () => {
     // set up constants
@@ -12,7 +13,7 @@ const App = () => {
     const MAX_ARRAY_SIZE = 30;
     const MIN_ARRAY_VAL = 0;
     const MAX_ARRAY_VAL = 500;
-    const ANINMATION_SPEED = 100;
+    const ANINMATION_SPEED = 200;
 
     // set up array state hook
     const [ array, setArray ] = useState<number[]>([]);
@@ -25,6 +26,7 @@ const App = () => {
 
     // set initial array state
     useEffect(resetArray, []);
+    // useEffect(test, []); // TODO: stub; uncomment to test
 
     const sort = async (sortingAlgorithm : string) : Promise<void> =>  {
         // TODO: error message
