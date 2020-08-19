@@ -53,9 +53,46 @@ const bubbleSort = (array : number[]) => {
     return {animations: animations, sortedArray: array};
 };
 
+// TODO: rethink animation
 const mergeSort = (array : number[]) => {
     let animations : number[][] = [];
-    // TODO: implement
+    if (array.length >= 2) {
+        const midIdx = Math.floor(array.length / 2);
+        let leftArray : number[] = [];
+        let rightArray: number[] = [];
+        for (let i = 0; i < midIdx; i++) leftArray[i] = array[i];
+        for (let j = midIdx; j < array.length; j++) rightArray[j-midIdx] = array[j];
+        mergeSort(leftArray);
+        mergeSort(rightArray);
+        let i, j, k : number;
+        i = j = k = 0;
+        while (k < array.length) {
+            if (i >= leftArray.length) {
+                animations.push([k, j+midIdx, array[k], rightArray[j]]);
+                animations.push([k, j+midIdx, rightArray[j], rightArray[j]]);
+                array[k] = rightArray[j];
+                j++;
+            } else if (j >= rightArray.length) {
+                animations.push([k, i, array[k], leftArray[i]]);
+                animations.push([k, i, leftArray[i], leftArray[i]]);
+                array[k] = leftArray[i];
+                i++;
+            } else {
+                if (leftArray[i] < rightArray[j]) {
+                    animations.push([k, i, array[k], leftArray[i]]);
+                    animations.push([k, i, leftArray[i], leftArray[i]]);
+                    array[k] = leftArray[i];
+                    i++;
+                } else {
+                    animations.push([k, j+midIdx, array[k], rightArray[j]]);
+                    animations.push([k, j+midIdx, rightArray[j], rightArray[j]]);
+                    array[k] = rightArray[j];
+                    j++;
+                }
+            }
+            k++;
+        }
+    }
     return {animations: animations, sortedArray: array};
 };
 
@@ -65,4 +102,11 @@ const heapSort = (array : number[]) => {
     return {animations: animations, sortedArray: array};
 };
 
-export default { insertionSort, selectionSort, bubbleSort, mergeSort, heapSort };
+const testSort = (array : number[]) => {
+    console.log("intial: ", array);
+    let animations : number[][] = [];
+    console.log("sorted: ", array);
+    return {animations: animations, sortedArray: array};
+};
+
+export default { insertionSort, selectionSort, bubbleSort, mergeSort, heapSort, mergeSortTest: testSort };
