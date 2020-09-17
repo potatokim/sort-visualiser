@@ -76,9 +76,10 @@ const App = () => {
             <Title />
             <MenuBar resetArray={resetArray} sort={sort} />
             <ArrayComponent data={array} />
+            <p style={{color: "darkgray", textAlign: "right"}}>Animation for Selection Sort is ready. Others are work in progress.</p>
         </div>
     );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'))n;
+ReactDOM.render(<App />, document.getElementById('root'));
 
