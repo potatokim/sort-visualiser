@@ -9,11 +9,11 @@ const generateRandomNumber = (max : number, min : number) : number => {
 };
 
 
-const test = () => {
-    const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE, MIN_ARRAY_SIZE)).fill(0)
-        .map(() => generateRandomNumber(MAX_ARRAY_VAL, MIN_ARRAY_VAL));
-    const result = sortingAlgorithms.mergeSortTest(initialArray);
-    console.log("test result: ", result);
-};
+// const test = () => {
+//     const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE, MIN_ARRAY_SIZE)).fill(0)
+//         .map(() => generateRandomNumber(MAX_ARRAY_VAL, MIN_ARRAY_VAL));
+//     const result = sortingAlgorithms.mergeSortTest(initialArray);
+//     console.log("test result: ", result);
+// };
 
 export default test;

@@ -5,7 +5,7 @@ import Title from "./components/Title";
 import MenuBar from "./components/MenuBar";
 import ArrayComponent from "./components/ArrayComponent";
 import sortingAlgorithms from "./sortingAlgorithms";
-import test from "./tests";
+// import test from "./tests";
 
 const App = () => {
     // set up constants
