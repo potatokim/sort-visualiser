@@ -55,6 +55,7 @@ code {
 .array-component {
   display: flex;
   justify-content: center;
+  height: 470px;
 }
 
 .array-element-component {
