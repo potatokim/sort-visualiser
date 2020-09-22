@@ -9,17 +9,19 @@ import sortingAlgorithms from "./sortingAlgorithms";
 
 const App = () => {
     // set up constants
-    const MIN_ARRAY_SIZE = 4;
+    const MIN_ARRAY_SIZE = 5;
     const MAX_ARRAY_SIZE = 30;
     const MIN_ARRAY_VAL = 0;
-    const MAX_ARRAY_VAL = 500;
+    const MAX_ARRAY_VAL = 470;
     const ANINMATION_SPEED = 200;
 
     // set up array state hook
     const [ array, setArray ] = useState<number[]>([]);
+    const [ animationSpeed, setAnimationSpeed ] = useState<number>(ANINMATION_SPEED);
+    const [ maxArraySize, setMaxArraySize ] = useState<number>(MAX_ARRAY_SIZE);
 
     const resetArray = () : void => {
-        const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE, MIN_ARRAY_SIZE)).fill(0)
+        const initialArray = new Array(generateRandomNumber(maxArraySize, MIN_ARRAY_SIZE)).fill(0)
             .map(() => generateRandomNumber(MAX_ARRAY_VAL, MIN_ARRAY_VAL));
         console.log(initialArray); // for testing recursive func
         setArray(initialArray);
@@ -27,7 +29,15 @@ const App = () => {
 
     // set initial array state
     useEffect(resetArray, []);
-    // useEffect(test, []); // TODO: stub; uncomment to test
+    // useEffect(test, []); // uncomment to test
+
+    const handleChangeArraySize = (newMaxArraySize : number) => {
+        setMaxArraySize(newMaxArraySize);
+    };
+
+    const handleChangeAnimationSpeed = (newAnimationSpeed : number) => {
+        setAnimationSpeed(newAnimationSpeed);
+    };
 
     const sort = async (sortingAlgorithm : string) : Promise<void> =>  {
         // TODO: error message
@@ -71,7 +81,7 @@ const App = () => {
                         arrayElements[animations[i][0]].style.height = `${animations[i][1]}px`;
                     }
                     if (i === animations.length - 1) resolve("animate");
-                }, i * ANINMATION_SPEED);
+                }, i * ANINMATION_SPEED / animationSpeed);
             }
         });
     };
@@ -83,7 +93,12 @@ const App = () => {
     return (
         <div>
             <Title />
-            <MenuBar resetArray={resetArray} sort={sort} />
+            <MenuBar
+                resetArray={resetArray}
+                sort={sort}
+                onChangeArraySize={handleChangeArraySize}
+                onChangeAnimationSpeed={handleChangeAnimationSpeed}
+            />
             <ArrayComponent data={array} />
             <p style={{color: "darkgray", textAlign: "right"}}>
                 Animation for Selection and Insertion Sort are ready. Others are work in progress.
