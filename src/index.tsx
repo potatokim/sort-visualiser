@@ -9,7 +9,7 @@ import sortingAlgorithms from "./sortingAlgorithms";
 
 const App = () => {
     // set up constants
-    const MIN_ARRAY_SIZE = 5;
+    const MIN_ARRAY_SIZE = 4;
     const MAX_ARRAY_SIZE = 30;
     const MIN_ARRAY_VAL = 0;
     const MAX_ARRAY_VAL = 500;
@@ -21,6 +21,7 @@ const App = () => {
     const resetArray = () : void => {
         const initialArray = new Array(generateRandomNumber(MAX_ARRAY_SIZE, MIN_ARRAY_SIZE)).fill(0)
             .map(() => generateRandomNumber(MAX_ARRAY_VAL, MIN_ARRAY_VAL));
+        console.log(initialArray); // for testing recursive func
         setArray(initialArray);
     };
 
@@ -55,12 +56,20 @@ const App = () => {
             Array.from(document.getElementsByClassName("array-element-component")) as unknown as HTMLCollectionOf<HTMLElement>;
         return new Promise((resolve) => {
             for (let i = 0; i < animations.length; i++) {
+                // animation = [changing indices and values, changed indices, changing indices, changed indices, ...]
                 setTimeout(() => {
                     const color = i % 2 ?  "cadetblue" : "lightcoral";
-                    arrayElements[animations[i][0]].style.backgroundColor = color;
-                    arrayElements[animations[i][1]].style.backgroundColor = color;
-                    arrayElements[animations[i][0]].style.height = `${animations[i][2]}px`;
-                    arrayElements[animations[i][1]].style.height = `${animations[i][3]}px`;
+                    // TODO: change to pair<int, int> ie. pair<index, value> data type
+                    if (animations[i].length > 2) {
+                        console.log(animations[i]);
+                        arrayElements[animations[i][0]].style.backgroundColor = color;
+                        arrayElements[animations[i][0]].style.height = `${animations[i][2]}px`;
+                        arrayElements[animations[i][1]].style.backgroundColor = color;
+                        arrayElements[animations[i][1]].style.height = `${animations[i][3]}px`;
+                    } else {
+                        arrayElements[animations[i][0]].style.backgroundColor = color;
+                        arrayElements[animations[i][0]].style.height = `${animations[i][1]}px`;
+                    }
                     if (i === animations.length - 1) resolve("animate");
                 }, i * ANINMATION_SPEED);
             }
@@ -76,7 +85,9 @@ const App = () => {
             <Title />
             <MenuBar resetArray={resetArray} sort={sort} />
             <ArrayComponent data={array} />
-            <p style={{color: "darkgray", textAlign: "right"}}>Animation for Selection Sort is ready. Others are work in progress.</p>
+            <p style={{color: "darkgray", textAlign: "right"}}>
+                Animation for Selection and Insertion Sort are ready. Others are work in progress.
+            </p>
         </div>
     );
 };

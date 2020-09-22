@@ -5,6 +5,9 @@ const selectionSort = (array : number[]) => {
     for (let i : number = 0; i < array.length; i++) {
         let curr = array[i];
         let minIdx = findMinIdx(array, i, array.length);
+        // swapping animation:
+        // original:    i<-array[i] minIdx<-array[minIdx]
+        // swapped:     i<-array[minIdx] minIdx<-array[i]
         animations.push([i, minIdx, array[i], array[minIdx]]);
         animations.push([i, minIdx, array[minIdx], array[i]]);
 
@@ -33,6 +36,9 @@ const insertionSort = (array : number[]) => {
         let curr : number = array[i];
         let j : number = i - 1;
         while (j >= 0 && array[j] > curr) {
+            // shifting animation:
+            // original: j<-array[j], j+1<-array[j+1]
+            // shifted: j<-array[j], j+1<-array[j]
             animations.push([j, j+1, array[j], array[j+1]]);
             animations.push([j, j+1, array[j], array[j]]);
 
@@ -40,8 +46,11 @@ const insertionSort = (array : number[]) => {
             j--;
         }
 
-        animations.push([i, j+1, array[i], array[j+1]]);
-        animations.push([i, j+1, array[i], array[i]]);
+        // overwriting animation:
+        // original: j+1<-array[j+1]
+        // overwritten: j+1<-array[i]
+        animations.push([j+1, array[j+1]]);
+        animations.push([j+1, curr]);
         array[j+1] = curr;
     }
     return {animations: animations, sortedArray: array};
@@ -66,26 +75,29 @@ const mergeSort = (array : number[]) => {
         mergeSort(rightArray);
         let i, j, k : number;
         i = j = k = 0;
+        // console.log("total: ", array);
+        // console.log("left: ", leftArray);
+        // console.log("right: ", rightArray);
         while (k < array.length) {
+            animations.push([k, array[k]]);
             if (i >= leftArray.length) {
-                animations.push([k, j+midIdx, array[k], rightArray[j]]);
-                animations.push([k, j+midIdx, rightArray[j], rightArray[j]]);
+                // placement animation (from auxiliary arrays in original array):
+                // original: k->array[k]
+                // placed: k->rightArray[j]
+                animations.push([k, rightArray[j]]);
                 array[k] = rightArray[j];
                 j++;
             } else if (j >= rightArray.length) {
-                animations.push([k, i, array[k], leftArray[i]]);
-                animations.push([k, i, leftArray[i], leftArray[i]]);
+                animations.push([k, leftArray[i]]);
                 array[k] = leftArray[i];
                 i++;
             } else {
                 if (leftArray[i] < rightArray[j]) {
-                    animations.push([k, i, array[k], leftArray[i]]);
-                    animations.push([k, i, leftArray[i], leftArray[i]]);
+                    animations.push([k, leftArray[i]]);
                     array[k] = leftArray[i];
                     i++;
                 } else {
-                    animations.push([k, j+midIdx, array[k], rightArray[j]]);
-                    animations.push([k, j+midIdx, rightArray[j], rightArray[j]]);
+                    animations.push([k, rightArray[j]]);
                     array[k] = rightArray[j];
                     j++;
                 }
