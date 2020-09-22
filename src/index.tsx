@@ -36,7 +36,7 @@ const App = () => {
     };
 
     const handleChangeAnimationSpeed = (newAnimationSpeed : number) => {
-        setAnimationSpeed(newAnimationSpeed);
+        setAnimationSpeed(ANINMATION_SPEED / newAnimationSpeed);
     };
 
     const sort = async (sortingAlgorithm : string) : Promise<void> =>  {
@@ -81,7 +81,7 @@ const App = () => {
                         arrayElements[animations[i][0]].style.height = `${animations[i][1]}px`;
                     }
                     if (i === animations.length - 1) resolve("animate");
-                }, i * ANINMATION_SPEED / animationSpeed);
+                }, i * animationSpeed);
             }
         });
     };
